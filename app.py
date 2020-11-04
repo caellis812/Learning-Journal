@@ -51,9 +51,10 @@ def entry():
 
 if __name__ == '__main__':
     models.initialize()
-    app.run(debug=DEBUG, host=HOST, port=PORT)
     models.Entry.create(
         title="TEST ENTRY ON RUN OF APP.PY",
         time_spent="TEST",
         learned="TEST",
         resources="TEST")
+    app.run(debug=DEBUG, host=HOST, port=PORT)
+
