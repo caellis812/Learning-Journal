@@ -1,10 +1,21 @@
-{% macro render_field(field) %}
+{% macro render_field(field, old_data="") %}
     <div class="field">
+        {% if field.name != "csrf_token" %}
+            <label for="field.name">{{field.label}}</label>
+        {% endif %}
+        {% if field.name == "date" %}
+            <input id="date" type="date" name="date"><br>
+        {% endif %}
         {% if field.errors %}
             {% for error in field.errors %}
                 <div class="notification error">{{ error }}</div>
             {% endfor %}
         {% endif %}
-        {{ field(placeholder=field.label.text) }}
+        {% if field.name != "date" %}
+            {{ field(placeholder=field.label.data) }}
+        {% endif %}
+        {% if entry != "" %}
+            {{ field(placeholder=old_data) }}
+        {% endif %}
     </div>
 {% endmacro %}

@@ -7,15 +7,15 @@ DATABASE = SqliteDatabase('journal.db')
 
 class Entry(Model):
     id = AutoField()
+    timestamp = DateTimeField(default=datetime.datetime.now)
     title = TextField()
-    #date = DateField()
+    date = DateField()
     time_spent = TextField()
     learned = TextField()
     resources = TextField()
 
     class Meta:
         database = DATABASE
-        order_by = ('-date',)
 
 
 def initialize():

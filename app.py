@@ -1,5 +1,4 @@
 from flask import (Flask, g, render_template, flash, redirect, url_for)
-import datetime
 
 import models
 import forms
@@ -29,32 +28,47 @@ def after_request(response):
 @app.route('/')
 @app.route('/entries')
 def index():
-    entries = models.Entry.select().limit(100)
+    entries = models.Entry.select().order_by(models.Entry.date.desc(), models.Entry.timestamp.desc())
     return render_template('index.html', entries=entries)
 
 
 @app.route('/entries/new', methods=('GET', 'POST'))
 def entry():
     form = forms.EntryForm()
-    print(form.title.data, form.timeSpent.data, form.whatILearned.data, form.ResourcesToRemember.data)
     if form.validate_on_submit():
         models.Entry.create(
             title=form.title.data,
-            #date=form.date.data,
-            time_spent=form.timeSpent.data,
-            learned=form.whatILearned.data,
-            resources=form.ResourcesToRemember.data)
+            date=form.date.data,
+            time_spent=form.time_spent.data,
+            learned=form.learned.data,
+            resources=form.resources.data)
         flash("Entry posted!", "success")
         return redirect(url_for('index'))
     return render_template('new.html', form=form)
 
 
+@app.route('/entries/<id>')
+def detail(id):
+    entry = models.Entry.get(models.Entry.id == id)
+    return render_template('detail.html', entry=entry)
+
+
+@app.route('/entries/<id>/edit', methods=('GET', 'POST'))
+def edit(id):
+    entry = models.Entry.get(models.Entry.id==id)
+    form = forms.EntryForm()
+    if form.validate_on_submit():
+        entry.title=form.title.data,
+        entry.date=form.date.data,
+        entry.time_spent=form.time_spent.data,
+        entry.learned=form.learned.data,
+        entry.resources=form.resources.data
+        entry.save()
+        flash("Entry edited!", "success")
+        return redirect(url_for('index'))
+    return render_template('edit.html', form=form, entry=entry)
+
+
 if __name__ == '__main__':
     models.initialize()
-    models.Entry.create(
-        title="TEST ENTRY ON RUN OF APP.PY",
-        time_spent="TEST",
-        learned="TEST",
-        resources="TEST")
     app.run(debug=DEBUG, host=HOST, port=PORT)
-
