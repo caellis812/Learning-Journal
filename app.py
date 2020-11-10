@@ -36,6 +36,7 @@ def index():
 def entry():
     form = forms.EntryForm()
     if form.validate_on_submit():
+        print(form.date.data)
         models.Entry.create(
             title=form.title.data,
             date=form.date.data,
@@ -55,18 +56,32 @@ def detail(id):
 
 @app.route('/entries/<id>/edit', methods=('GET', 'POST'))
 def edit(id):
-    entry = models.Entry.get(models.Entry.id==id)
+    entry = models.Entry.get(models.Entry.id == id)
     form = forms.EntryForm()
     if form.validate_on_submit():
-        entry.title=form.title.data,
-        entry.date=form.date.data,
-        entry.time_spent=form.time_spent.data,
-        entry.learned=form.learned.data,
-        entry.resources=form.resources.data
+        entry.title = form.title.data
+        entry.date = form.date.data
+        entry.time_spent = form.time_spent.data
+        entry.learned = form.learned.data
+        entry.resources = form.resources.data
         entry.save()
         flash("Entry edited!", "success")
         return redirect(url_for('index'))
-    return render_template('edit.html', form=form, entry=entry)
+    return render_template('edit.html', entry=entry, form=form, id=id)
+
+
+@app.route('/entries/<id>/deletecheck')
+def deletecheck(id):
+    entry = models.Entry.get(models.Entry.id == id)
+    return render_template('delete.html', entry=entry)
+
+
+@app.route('/entries/<id>/delete')
+def delete(id):
+    entry = models.Entry.get(models.Entry.id == id)
+    entry.delete_instance()
+    flash("Entry deleted.", "success")
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':

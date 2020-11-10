@@ -14,8 +14,11 @@
     <body>
         <header>
             <div class="container">
+                <div>
+                    <h2 class="sitetitle">Learning <br>Journal </h2>
+                </div>
                 <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
+                    <a class="logo" href="/entries"><i class="material-icons">library_books</i></a>
                     <a class="button icon-right" href="/entries/new"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
             </div>
@@ -26,9 +29,19 @@
                     <h2>New Entry</h2>
                     <form method="POST" action="" >
                         {{ form.hidden_tag() }}
-                        {% for field in form %}
-                            {{ render_field(field) }}
-                        {% endfor %}
+                            {% for field in form %}
+                                {% if field.name != "csrf_token" %}
+                                {{ field.label }}
+                                    {% if field.name == "date" %}
+                                        {% for error in field.errors %}
+                                        <div class="notification error">{{ error }}</div>
+                                        {% endfor %}
+                                        <input id="date" type="date" name="date"><br>
+                                    {% else %}
+                                    {{ render_field(field) }}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
                         <input type="submit" value="Publish Entry" class="button">
                         <a href="{{ url_for('index') }}" class="button button-secondary">Cancel</a>
                     </form>

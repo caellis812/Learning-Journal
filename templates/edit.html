@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% from 'macros.html' import render_field %}
 <html>
     <head>
         <meta charset="utf-8">
@@ -14,23 +13,44 @@
     <body>
         <header>
             <div class="container">
+                <div>
+                    <h2 class="sitetitle">Learning <br>Journal </h2>
+                </div>
                 <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
-                    <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
+                    <a class="logo" href="/entries"><i class="material-icons">library_books</i></a>
+                    <a class="button icon-right" href="/entries/new"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
             </div>
         </header>
         <section>
             <div class="container">
+                <div>
+                    {% for field in form %}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                            <h3 class="empty">All fields are required -- You've deleted a field without re-entering information.<br>
+                            All fields have been restored to their last saved inputs.</h3>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
                 <div class="edit-entry">
                     <h2>Edit Entry</h2>
-                    <form>
                     <form method="POST" action="" >
                         {{ form.hidden_tag() }}
-                        {{ render_field(form.title, entry.title) }}
-                        {{ render_field(form.time_spent, entry.time_spent) }}
+                        <label for="{{form.title.name}}">{{ form.title.label }}</label>
+                        <input id="title" type="text" name="title" value="{{entry.title}}">
+                        <label for="{{form.date.name}}">{{ form.date.label }}</label>
+                        <input id="date" type="date" name="date" value="{{entry.date.strftime('%Y-%m-%d')}}"><br>
+                        <label for="{{form.time_spent.name}}">{{ form.time_spent.label }}</label>
+                        <textarea id="time_spent" rows="5" name="time_spent">{{ entry.time_spent }}</textarea>
+                        <label for="{{form.learned.name}}">{{ form.learned.label }}</label>
+                        <textarea id="learned" rows="5" name="learned">{{ entry.learned }}</textarea>
+                        <label for="{{form.resources.name}}">{{ form.resources.label }}</label>
+                        <textarea id="resources" rows="5" name="resources">{{ entry.resources }}</textarea>
                         <input type="submit" value="Publish Edits" class="button">
-                        <a href="{{ url_for('index') }}" class="button button-secondary">Cancel</a>
+                        <a href="/entries/{{entry.id}}/deletecheck" class="button button-warning">Delete Entry</a>
+                        <a href="/entries/{{entry.id}}" class="button button-secondary">Cancel</a>
                     </form>
                 </div>
             </div>
