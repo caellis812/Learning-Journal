@@ -11,7 +11,7 @@ body {
 	font-weight: 400;
 }
 .container {
-	margin: 0 auto;
+	margin: 0 0 20px 0;
 	padding: 0 25px;
 }
 header .site-header {
@@ -20,13 +20,13 @@ header .site-header {
 }
 header .logo i {
 	color: #678f89;
-	margin: 20px 0 0 -5px;
+	margin: 55px 0 20px -5px;
 	float: left;
 	font-size: 40px;
 }
 header .button {
 	float: right;
-	margin: 33px 0 0 0;
+	margin: 70px 0 20px 0;
 }
 footer {
 	text-align: center;
@@ -67,6 +67,12 @@ footer {
 .button.icon-right {
 	padding-right: 30px;
 	top: -10px;
+}
+.button.login {
+	padding-right: 30px;
+	top: -10px;
+	color: #8f6781
+	background: #FFF;
 }
 .button.icon-left {
 	padding-left: 30px;
@@ -257,11 +263,19 @@ input[type=submit] {
     padding-bottom: 10px;
 }
 
+.login {
+    color: #8f6781;
+    font-weight: bold;
+    margin-right: 10px
+}
+
 .sitetitle {
     padding-top: 20px;
+    padding-bottom: 20px;
     color: #8f6781;
     font-weight: bold;
 }
+
 
 
 

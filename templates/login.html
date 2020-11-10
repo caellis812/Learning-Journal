@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>MyJournal</title>
-        <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
+{% from 'macros.html' import render_field %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="/static/normalize.css">
         <link rel="stylesheet" href="/static/site.css">
-    </head>
-    <body>
-        <header>
+</head>
+<body>
+    <header>
             <div class="container">
                 <div class="site-header">
                 <h2 class="sitetitle">Learning <br>Journal </h2>
@@ -21,11 +21,10 @@
                 </div>
                 <div class="site-header">
                     <a class="logo" href="/entries"><i class="material-icons">library_books</i></a>
-                    <a class="button icon-right" href="/entries/new"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
             </div>
-        </header>
-            <!-- Flash messages -->
+    </header>
+    <!-- Flash messages -->
             {% with messages = get_flashed_messages(with_categories=True) %}
                 {% if messages %}
                     {% for category, message in messages %}
@@ -33,22 +32,20 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-        <section>
-            <div class="container">
-                <div class="entry-list">
-                    {% for entry in entries %}
-                        <article>
-                        <h2><a href="/entries/{{entry.id}}">{{entry.title}}</a></h2>
-                        <time datetime="{{entry.date}}">{{entry.date.strftime("%B %d, %Y")}}</time>
-                        </article>
-                    {% endfor %}
-                </div>
-            </div>
-        </section>
-        <footer>
-            <div>
-                &copy; MyJournal
-            </div>
-        </footer>
-    </body>
+    <div class="container">
+        <div class="edit-entry">
+            <h2> Log In</h2>
+            <form method="POST" action="" class="form">
+            {{ form.hidden_tag() }}
+            {% for field in form %}
+                {% if field.name != "csrf_token" %}
+                {{field.label}}
+                {{ render_field(field)}}
+                {% endif %}
+            {% endfor %}
+            <button type="submit" id="submit">Log In!</button>
+        </form>
+        </div>
+    </div>
+</body>
 </html>

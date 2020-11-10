@@ -13,8 +13,11 @@
     <body>
         <header>
             <div class="container">
-                <div>
-                    <h2 class="sitetitle">Learning <br>Journal </h2>
+                <div class="site-header">
+                <h2 class="sitetitle">Learning <br>Journal </h2>
+                <a class="login" href="/login">Log In</a>
+                <a class="login" href="/register">Register</a>
+                <a class="login" href="/logout">Log Out</a>
                 </div>
                 <div class="site-header">
                     <a class="logo" href="/entries"><i class="material-icons">library_books</i></a>
@@ -41,14 +44,12 @@
                             <p>{{entry.resources}}<p>
                         </div>
                     </article>
+                    <a href="/entries/{{entry.id}}/edit" class="button button-edit">Edit Entry </a>
+                    <a href="/entries/{{entry.id}}/deletecheck" class="button button-warning">Delete Entry</a>
                 </div>
-            </div>
-            <div class="edit">
-                <a href="/entries/{{entry.id}}/edit" class="button button-edit">Edit Entry </a>
-                <a href="/entries/{{entry.id}}/deletecheck" class="button button-warning">Delete Entry</a>
-            </div>
-            <div class="edit">
-            <a href="{{ url_for('index') }}" class="button button-secondary">Back to Entries</a>
+                <div class="edit">
+                    <a href="{{ url_for('index') }}" class="button button-secondary">Back to Entries</a>
+                    </div>
             </div>
         </section>
         <footer>

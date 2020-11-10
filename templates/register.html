@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% from 'macros.html' import render_field %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="/static/normalize.css">
+        <link rel="stylesheet" href="/static/site.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="site-header">
+            <h2 class="sitetitle">Learning <br>Journal </h2>
+            <a class="login" href="/login">Log In</a>
+            <a class="login" href="/register">Register</a>
+            <a class="login" href="/logout">Log Out</a>
+            </div>
+            <div class="site-header">
+                <a class="logo" href="/entries"><i class="material-icons">library_books</i></a>
+            </div>
+        </div>
+    </header>
+    <!-- Flash messages -->
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="flash">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+    <div class="container">
+        <div class="edit-entry">
+            <h2> Register</h2>
+            <form method="POST" action="" class="form">
+                {{ form.hidden_tag() }}
+                {% for field in form %}
+                    {% if field.name != "csrf_token" %}
+                    {{field.label}}
+                    {{ render_field(field) }}
+                    {%endif%}
+                {% endfor %}
+                <button type="submit" id="submit">Register!</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
