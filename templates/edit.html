@@ -27,17 +27,14 @@
         </header>
         <section>
             <div class="container">
-                <div>
+                <div class="edit-entry">
                     {% for field in form %}
                         {% if field.errors %}
-                            {% for error in field.errors %}
-                            <h3 class="empty">All fields are required -- You've deleted a field without re-entering information.<br>
-                            All fields have been restored to their last saved inputs.</h3>
-                            {% endfor %}
+                            <h3 class="empty">All fields are required, except Tags.</h3>
+                            <p class="empty">You've deleted a field without re-entering information.<br>
+                            All fields have been restored to their last saved inputs.</p>
                         {% endif %}
                     {% endfor %}
-                </div>
-                <div class="edit-entry">
                     <h2>Edit Entry</h2>
                     <form method="POST" action="" >
                         {{ form.hidden_tag() }}
@@ -51,6 +48,12 @@
                         <textarea id="learned" rows="5" name="learned">{{ entry.learned }}</textarea>
                         <label for="{{form.resources.name}}">{{ form.resources.label }}</label>
                         <textarea id="resources" rows="5" name="resources">{{ entry.resources }}</textarea>
+                        {{form.tag1.label}}
+                        <input id="tag1" type="text" name="tag1" value="{{tags_list[0]}}">
+                        <input id="tag2" type="text" name="tag2" value="{{tags_list[1]}}">
+                        <input id="tag3" type="text" name="tag3" value="{{tags_list[2]}}">
+                        <input id="tag4" type="text" name="tag4" value="{{tags_list[3]}}">
+                        <input id="tag5" type="text" name="tag5" value="{{tags_list[4]}}">
                         <input type="submit" value="Publish Edits" class="button">
                         <a href="/entries/{{entry.id}}/deletecheck" class="button button-warning">Delete Entry</a>
                         <a href="/entries/{{entry.id}}" class="button button-secondary">Cancel</a>

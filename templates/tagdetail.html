@@ -38,6 +38,7 @@
                 <div class="entry-list">
                     <article>
                     <h1>Entries Listing</h1>
+                    <h2 class="filter">Tag Filter: {{tag_id.content.capitalize()}}</h2>
                     </article>
                     {% for entry in entries %}
                         <article>
@@ -49,6 +50,9 @@
                             {% endfor %}</z>
                         </article>
                     {% endfor %}
+                    <div class="edit">
+                    <a href="{{ url_for('index') }}" class="button button-secondary">Clear Filter</a>
+                    </div>
                 </div>
             </div>
         </section>

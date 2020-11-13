@@ -3,6 +3,7 @@ from flask_login import (LoginManager, login_user, logout_user,
                          login_required, current_user)
 from flask_bcrypt import check_password_hash
 
+
 import models
 import forms
 
@@ -16,6 +17,17 @@ app.secret_key = 'aslkdfjoiewnoifboivj9832u'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+
+def delete_tags(id):
+    tags = models.EntryTag.select().where(models.EntryTag.entryid == id)
+    for tag in tags:
+        tag.delete_instance()
+
+
+def get_tags(id):
+    tags = models.Tag.select().join(models.EntryTag).join(models.Entry).where(models.Entry.id == id)
+    return tags
 
 
 @login_manager.user_loader
@@ -84,7 +96,7 @@ def logout():
 @app.route('/entries')
 def index():
     entries = models.Entry.select().order_by(models.Entry.date.desc(), models.Entry.timestamp.desc())
-    return render_template('index.html', entries=entries)
+    return render_template('index.html', entries=entries, models=models)
 
 
 @app.route('/entries/new', methods=('GET', 'POST'))
@@ -98,6 +110,18 @@ def entry():
             time_spent=form.time_spent.data,
             learned=form.learned.data,
             resources=form.resources.data)
+        tags = [form.tag1.data, form.tag2.data, form.tag3.data, form.tag4.data, form.tag5.data]
+        clean_tags = []
+        [clean_tags.append(tag) for tag in tags if tag not in clean_tags]
+        for tag in clean_tags:
+            if tag != "":
+                models.Tag.create_tag(content=tag.lower())
+                dbentry = models.Entry.select().order_by(models.Entry.id.desc()).get()
+                dbtag = models.Tag.get(models.Tag.content == tag.lower())
+                models.EntryTag.create(
+                    entryid=dbentry.id,
+                    tagid=dbtag.id
+                )
         flash("Entry posted!", "success")
         return redirect(url_for('index'))
     return render_template('new.html', form=form)
@@ -106,13 +130,20 @@ def entry():
 @app.route('/entries/<id>')
 def detail(id):
     entry = models.Entry.get(models.Entry.id == id)
-    return render_template('detail.html', entry=entry)
+    tags = get_tags(id)
+    return render_template('detail.html', entry=entry, tags=tags)
 
 
 @app.route('/entries/<id>/edit', methods=('GET', 'POST'))
 @login_required
 def edit(id):
     entry = models.Entry.get(models.Entry.id == id)
+    tags = get_tags(id)
+    tags_list = []
+    for tag in tags:
+        tags_list.append(tag.content)
+    while len(tags_list) < 5:
+        tags_list.append("")
     form = forms.EntryForm()
     if form.validate_on_submit():
         entry.title = form.title.data
@@ -121,9 +152,21 @@ def edit(id):
         entry.learned = form.learned.data
         entry.resources = form.resources.data
         entry.save()
+        delete_tags(entry.id)
+        tags = [form.tag1.data, form.tag2.data, form.tag3.data, form.tag4.data, form.tag5.data]
+        print(tags)
+        for tag in tags:
+            if tag != "":
+                models.Tag.create_tag(content=tag.lower())
+                dbentry = entry
+                dbtag = models.Tag.get(models.Tag.content == tag.lower())
+                models.EntryTag.create(
+                    entryid=dbentry.id,
+                    tagid=dbtag.id
+                )
         flash("Entry edited!", "success")
         return redirect(url_for('index'))
-    return render_template('edit.html', entry=entry, form=form, id=id)
+    return render_template('edit.html', entry=entry, tags_list=tags_list, form=form, id=id)
 
 
 @app.route('/entries/<id>/deletecheck')
@@ -136,9 +179,17 @@ def deletecheck(id):
 @app.route('/entries/<id>/delete')
 def delete(id):
     entry = models.Entry.get(models.Entry.id == id)
+    delete_tags(entry.id)
     entry.delete_instance()
     flash("Entry deleted.", "success")
     return redirect(url_for('index'))
+
+
+@app.route('/tag/<id>')
+def tag_view(id):
+    tag_id = models.Tag.get(models.Tag.id == id)
+    entries = models.Entry.select().join(models.EntryTag).join(models.Tag).where(models.Tag.id == id)
+    return render_template('tagdetail.html', entries=entries, models=models, tag_id=tag_id)
 
 
 if __name__ == '__main__':

@@ -127,9 +127,20 @@ p {
 	line-height: 1.8em;
 	font-size: 18px;
 }
+
 p a {
 	border-bottom: 2px solid #678f89;
 	padding: 0;
+	color: #678f89;
+	text-decoration: none;
+}
+z {
+	line-height: 2.5em;
+	font-size: 15px;
+	font-style: italic;
+}
+z a {
+	padding: 5px;
 	color: #678f89;
 	text-decoration: none;
 }
@@ -274,6 +285,10 @@ input[type=submit] {
     padding-bottom: 20px;
     color: #8f6781;
     font-weight: bold;
+}
+
+.filter {
+    color: #8f6781
 }
 
 

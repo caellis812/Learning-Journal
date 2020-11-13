@@ -43,6 +43,12 @@
                             <h3>Resources to Remember:</h3>
                             <p>{{entry.resources}}<p>
                         </div>
+                        <div class="entry">
+                            <h3>Tags:</h3>
+                            {% for tag in tags %}
+                            <z><a href="/tag/{{tag.id}}">{{tag.content}}</a></z>
+                            {% endfor %}
+                        </div>
                     </article>
                     <a href="/entries/{{entry.id}}/edit" class="button button-edit">Edit Entry </a>
                     <a href="/entries/{{entry.id}}/deletecheck" class="button button-warning">Delete Entry</a>

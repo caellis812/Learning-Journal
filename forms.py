@@ -50,3 +50,8 @@ class EntryForm(FlaskForm):
     time_spent = TextAreaField('Time Spent', validators=[DataRequired()])
     learned = TextAreaField("What I Learned", validators=[DataRequired()])
     resources = TextAreaField("Resources To Remember", validators=[DataRequired()])
+    tag1 = StringField("Entry Tags (Optional, Max of 5)")
+    tag2 = StringField("Entry Tags (Optional, Max of 5)")
+    tag3 = StringField("Entry Tags (Optional, Max of 5)")
+    tag4 = StringField("Entry Tags (Optional, Max of 5)")
+    tag5 = StringField("Entry Tags (Optional, Max of 5)")

@@ -39,7 +39,32 @@ class Entry(Model):
         database = DATABASE
 
 
+class Tag(Model):
+    id = AutoField()
+    content = TextField(unique=True)
+
+    class Meta:
+        database = DATABASE
+
+    @classmethod
+    def create_tag(cls, content):
+        try:
+            with DATABASE.transaction():
+                cls.create(
+                    content=content)
+        except IntegrityError:
+            pass
+
+
+class EntryTag(Model):
+    entryid = ForeignKeyField(Entry)
+    tagid = ForeignKeyField(Tag)
+
+    class Meta:
+        database = DATABASE
+
+
 def initialize():
     DATABASE.connect()
-    DATABASE.create_tables([Entry, User], safe=True)
+    DATABASE.create_tables([User, Entry, Tag, EntryTag], safe=True)
     DATABASE.close()
